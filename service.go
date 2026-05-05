@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/proto"
 	"github.com/sirupsen/logrus"
 	"github.com/xpzouying/headless_browser"
 	"github.com/xpzouying/xiaohongshu-mcp/browser"
@@ -546,7 +547,7 @@ func (s *XiaohongshuService) ReplyCommentToFeed(ctx context.Context, feedID, xse
 }
 
 // newBrowser 创建浏览器实例，支持多种模式
-func newBrowser() interface{ NewPage() *rod.Page; Close() error; GetCookies() ([]*rod.Cookie, error) } {
+func newBrowser() interface{ NewPage() *rod.Page; Close() error; GetCookies() ([]*proto.NetworkCookie, error) } {
 	// 检查是否使用 BitBrowser 模式
 	if configs.IsBitBrowserMode() {
 		apiURL := configs.GetBitBrowserAPI()

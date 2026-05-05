@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/proto"
 	"github.com/sirupsen/logrus"
 	"github.com/xpzouying/headless_browser"
 	"github.com/xpzouying/xiaohongshu-mcp/cookies"
@@ -194,7 +195,7 @@ func (bw *BrowserWrapper) Close() error {
 }
 
 // GetCookies 获取 cookies
-func (bw *BrowserWrapper) GetCookies() ([]*rod.Cookie, error) {
+func (bw *BrowserWrapper) GetCookies() ([]*proto.NetworkCookie, error) {
 	if bw.isBitBrowser && bw.rodBrowser != nil {
 		return bw.rodBrowser.GetCookies()
 	}
