@@ -545,7 +545,26 @@ func (s *XiaohongshuService) ReplyCommentToFeed(ctx context.Context, feedID, xse
 	}, nil
 }
 
-func newBrowser() *headless_browser.Browser {
+// newBrowser 创建浏览器实例，支持多种模式
+func newBrowser() interface{ NewPage() *rod.Page; Close() error; GetCookies() ([]*rod.Cookie, error) } {
+	// 检查是否使用 BitBrowser 模式
+	if configs.IsBitBrowserMode() {
+		apiURL := configs.GetBitBrowserAPI()
+		profileID := configs.GetBitBrowserProfile()
+		token := configs.GetBitBrowserToken()
+		
+		if profileID == "" {
+			logrus.Fatal("BitBrowser profile ID is required. Use --bitbrowser-profile-id or set BITBROWSER_PROFILE_ID env var")
+		}
+		
+		bw, err := browser.NewBitBrowser(apiURL, profileID, token)
+		if err != nil {
+			logrus.Fatalf("Failed to create BitBrowser: %v", err)
+		}
+		return bw
+	}
+	
+	// 默认使用 headless_browser
 	return browser.NewBrowser(configs.IsHeadless(), browser.WithBinPath(configs.GetBinPath()))
 }
 
